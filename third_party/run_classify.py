@@ -48,6 +48,7 @@ from transformers import (
 from processors.utils import convert_examples_to_features
 from processors.xnli import XnliProcessor
 from processors.pawsx import PawsxProcessor
+from processors.cls import ClsProcessor
 
 try:
   from torch.utils.tensorboard import SummaryWriter
@@ -72,6 +73,7 @@ MODEL_CLASSES = {
 PROCESSORS = {
   'xnli': XnliProcessor,
   'pawsx': PawsxProcessor,
+  'cls': ClsProcessor
 }
 
 
