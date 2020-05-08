@@ -24,9 +24,16 @@ export CUDA_VISIBLE_DEVICES=$GPU
 TASK='cls'
 LR=2e-5
 EPOCH=5
-MAXL=128
-LANGS="de,en,fr,jp,nl"
+# Increaes max sequence length for long sequences. max seq length cant be larger than max_position_embedding of the pretrained model,
+# which is fixed and equal to 514. Thus we pick MAXL as close to it as possible. Got some errors when setting to 514
+MAXL=500
+TRAIN_LANG="en"
+LANGS="nl"
 LC=""
+
+echo "Train langauge: $TRAIN_LANG"
+echo "Test languages: $LANGS"
+
 if [ $MODEL == "bert-base-multilingual-cased" ]; then
   MODEL_TYPE="bert"
 elif [ $MODEL == "xlm-mlm-100-1280" ] || [ $MODEL == "xlm-mlm-tlm-xnli15-1024" ]; then
@@ -52,7 +59,7 @@ mkdir -p $SAVE_DIR
 python $PWD/third_party/run_classify.py \
   --model_type $MODEL_TYPE \
   --model_name_or_path $MODEL \
-  --train_language en \
+  --train_language $TRAIN_LANG \
   --task_name $TASK \
   --do_train \
   --do_eval \

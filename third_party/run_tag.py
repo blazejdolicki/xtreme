@@ -518,7 +518,7 @@ def main():
 
   # Set seed
   set_seed(args)
-
+  print("arg labels",args.labels)
   # Prepare NER/POS task
   labels = get_labels(args.labels)
   num_labels = len(labels)

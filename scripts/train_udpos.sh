@@ -21,7 +21,9 @@ OUT_DIR=${4:-"$REPO/outputs/"}
 
 TASK='udpos'
 export CUDA_VISIBLE_DEVICES=$GPU
-LANGS='af,ar,bg,de,el,en,es,et,eu,fa,fi,fr,he,hi,hu,id,it,ja,kk,ko,mr,nl,pt,ru,ta,te,th,tl,tr,ur,vi,yo,zh'
+TRAIN_LANG='de'
+# LANGS='af,ar,bg,de,el,en,es,et,eu,fa,fi,fr,he,hi,hu,id,it,ja,kk,ko,mr,nl,pt,ru,ta,te,th,tl,tr,ur,vi,yo,zh'
+LANGS='nl'
 NUM_EPOCHS=10
 MAX_LENGTH=128
 LR=2e-5
@@ -47,11 +49,14 @@ fi
 DATA_DIR=$DATA_DIR/$TASK/${TASK}_processed_maxlen${MAX_LENGTH}/
 OUTPUT_DIR="$OUT_DIR/$TASK/${MODEL}-LR${LR}-epoch${NUM_EPOCH}-MaxLen${MAX_LENGTH}/"
 mkdir -p $OUTPUT_DIR
+echo "DATA_DIR"
+echo ${DATA_DIR}
 python3 $REPO/third_party/run_tag.py \
   --data_dir $DATA_DIR \
   --model_type $MODEL_TYPE \
   --labels $DATA_DIR/labels.txt \
   --model_name_or_path $MODEL \
+  --train_langs $TRAIN_LANG \
   --output_dir $OUTPUT_DIR \
   --max_seq_length  $MAX_LENGTH \
   --num_train_epochs $NUM_EPOCHS \

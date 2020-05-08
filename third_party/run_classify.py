@@ -798,7 +798,7 @@ def main():
     with open(output_predict_file, 'a') as writer:
       writer.write('======= Predict using the model from {} for {}:\n'.format(best_checkpoint, args.test_split))
       for language in args.predict_languages.split(','):
-        result = evaluate(args, model, tokenizer, split=args.test_split, language=language, lang2id=lang2id, prefix='best_checkpoint')
+        result = evaluate(args, model, tokenizer, split=args.test_split, language=language, lang2id=lang2id, prefix='best_checkpoint',output_file=f"{args.output_dir}/test_preds.tsv",output_only_prediction=False)
         writer.write('{}={}\n'.format(language, result['acc']))
         logger.info('{}={}'.format(language, result['acc']))
         total += result['num']
