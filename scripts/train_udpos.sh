@@ -21,7 +21,7 @@ OUT_DIR=${4:-"$REPO/outputs/"}
 
 TASK='udpos'
 export CUDA_VISIBLE_DEVICES=$GPU
-TRAIN_LANG='de'
+TRAIN_LANG='nl'
 # LANGS='af,ar,bg,de,el,en,es,et,eu,fa,fi,fr,he,hi,hu,id,it,ja,kk,ko,mr,nl,pt,ru,ta,te,th,tl,tr,ur,vi,yo,zh'
 LANGS='nl'
 NUM_EPOCHS=10

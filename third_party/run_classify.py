@@ -793,6 +793,7 @@ def main():
     tokenizer = tokenizer_class.from_pretrained(args.model_name_or_path if args.model_name_or_path else best_checkpoint, do_lower_case=args.do_lower_case)
     model = model_class.from_pretrained(best_checkpoint)
     model.to(args.device)
+    print(model)
     output_predict_file = os.path.join(args.output_dir, args.test_split + '_results.txt')
     total = total_correct = 0.0
     with open(output_predict_file, 'a') as writer:

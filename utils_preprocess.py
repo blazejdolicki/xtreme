@@ -79,10 +79,8 @@ def panx_tokenize_preprocess(args):
     out_dir = os.path.join(args.output_dir, lang)
     if not os.path.exists(out_dir):
       os.makedirs(out_dir)
-    if lang == 'en':
-      files = ['dev', 'test', 'train']
-    else:
-      files = ['dev', 'test']
+    
+    files = ['dev', 'test', 'train']
     for file in files:
       infile = os.path.join(args.data_dir, f'{file}-{lang}.tsv')
       outfile = os.path.join(out_dir, "{}.{}".format(file, args.model_name_or_path))
@@ -165,10 +163,9 @@ def udpos_tokenize_preprocess(args):
     out_dir = os.path.join(args.output_dir, lang)
     if not os.path.exists(out_dir):
       os.makedirs(out_dir)
-    if lang == 'en':
-      files = ['dev', 'test', 'train']
-    else:
-      files = ['dev', 'test']
+
+    files = ['dev', 'test', 'train']
+
     for file in files:
       infile = os.path.join(args.data_dir, "{}-{}.tsv".format(file, lang))
       outfile = os.path.join(out_dir, "{}.{}".format(file, args.model_name_or_path))
