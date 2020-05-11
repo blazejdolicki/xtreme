@@ -351,7 +351,7 @@ def evaluate(args, model, tokenizer, split='train', language='en', lang2id=None,
         if args.model_type == "xlm":
           inputs["langs"] = batch[4]
         outputs = model(**inputs)
-        tmp_eval_loss, logits, attentions = outputs[:3]
+        tmp_eval_loss, logits = outputs[:2]
         print("logits",logits)
 
         last_layer = attentions[-1]
