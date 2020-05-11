@@ -351,8 +351,11 @@ def evaluate(args, model, tokenizer, split='train', language='en', lang2id=None,
         if args.model_type == "xlm":
           inputs["langs"] = batch[4]
         outputs = model(**inputs)
-        tmp_eval_loss, logits = outputs[:2]
+        tmp_eval_loss, logits, attentions = outputs[:3]
+        print("logits",logits)
 
+        last_layer = attentions[-1]
+        torch.save(last_layer, 'last_layer_attention.pt')
         eval_loss += tmp_eval_loss.mean().item()
       nb_eval_steps += 1
       if preds is None:
@@ -692,7 +695,9 @@ def main():
     num_labels=num_labels,
     finetuning_task=args.task_name,
     cache_dir=args.cache_dir if args.cache_dir else None,
+    output_attentions=True
   )
+
   logger.info("config = {}".format(config))
 
   tokenizer = tokenizer_class.from_pretrained(
