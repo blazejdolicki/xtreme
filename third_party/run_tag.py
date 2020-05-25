@@ -26,7 +26,7 @@ import random
 
 import numpy as np
 import torch
-from seqeval.metrics import precision_score, recall_score, f1_score
+from seqeval.metrics import precision_score, recall_score, f1_score, accuracy_score
 from tensorboardX import SummaryWriter
 from torch.nn import CrossEntropyLoss
 from torch.utils.data import DataLoader, TensorDataset
@@ -293,7 +293,7 @@ def evaluate(args, model, tokenizer, labels, pad_token_label_id, mode, prefix=""
       out_label_ids = np.append(out_label_ids, inputs["labels"].detach().cpu().numpy(), axis=0)
 
   if nb_eval_steps == 0:
-    results = {k: 0 for k in ["loss", "precision", "recall", "f1"]}
+    results = {k: 0 for k in ["loss", "accuracy","precision", "recall", "f1"]}
   else:
     eval_loss = eval_loss / nb_eval_steps
     preds = np.argmax(preds, axis=2)
@@ -311,6 +311,7 @@ def evaluate(args, model, tokenizer, labels, pad_token_label_id, mode, prefix=""
 
     results = {
       "loss": eval_loss,
+      "accuracy": accuracy_score(out_label_list, preds_list),
       "precision": precision_score(out_label_list, preds_list),
       "recall": recall_score(out_label_list, preds_list),
       "f1": f1_score(out_label_list, preds_list)

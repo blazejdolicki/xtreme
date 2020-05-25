@@ -352,10 +352,12 @@ def evaluate(args, model, tokenizer, split='train', language='en', lang2id=None,
           inputs["langs"] = batch[4]
         outputs = model(**inputs)
         tmp_eval_loss, logits = outputs[:2]
-        print("logits",logits)
+        # print("logits",logits)
 
-        last_layer = attentions[-1]
-        torch.save(last_layer, 'last_layer_attention.pt')
+        # attentions = outputs[2]
+        # last_layer = attentions[-1]
+        # torch.save(last_layer, 'last_layer_attention.pt')
+
         eval_loss += tmp_eval_loss.mean().item()
       nb_eval_steps += 1
       if preds is None:

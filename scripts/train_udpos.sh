@@ -21,9 +21,8 @@ OUT_DIR=${4:-"$REPO/outputs/"}
 
 TASK='udpos'
 export CUDA_VISIBLE_DEVICES=$GPU
-TRAIN_LANG='nl'
-# LANGS='af,ar,bg,de,el,en,es,et,eu,fa,fi,fr,he,hi,hu,id,it,ja,kk,ko,mr,nl,pt,ru,ta,te,th,tl,tr,ur,vi,yo,zh'
-LANGS='nl'
+LANGS='af,ar,bg,de,el,en,es,et,eu,fa,fi,fr,he,hi,hu,id,it,ja,kk,ko,mr,nl,pt,ru,ta,te,th,tl,tr,ur,vi,yo,zh'
+# LANGS='kk,th,tl,yo'
 NUM_EPOCHS=10
 MAX_LENGTH=128
 LR=2e-5
@@ -47,31 +46,32 @@ else
 fi
 
 DATA_DIR=$DATA_DIR/$TASK/${TASK}_processed_maxlen${MAX_LENGTH}/
-OUTPUT_DIR="$OUT_DIR/$TASK/${MODEL}-LR${LR}-epoch${NUM_EPOCH}-MaxLen${MAX_LENGTH}/"
-mkdir -p $OUTPUT_DIR
-echo "DATA_DIR"
-echo ${DATA_DIR}
-python3 $REPO/third_party/run_tag.py \
-  --data_dir $DATA_DIR \
-  --model_type $MODEL_TYPE \
-  --labels $DATA_DIR/labels.txt \
-  --model_name_or_path $MODEL \
-  --train_langs $TRAIN_LANG \
-  --output_dir $OUTPUT_DIR \
-  --max_seq_length  $MAX_LENGTH \
-  --num_train_epochs $NUM_EPOCHS \
-  --gradient_accumulation_steps $GRAD_ACC \
-  --per_gpu_train_batch_size $BATCH_SIZE \
-  --save_steps 500 \
-  --seed 1 \
-  --learning_rate $LR \
-  --do_train \
-  --do_eval \
-  --do_predict \
-  --do_predict_dev \
-  --evaluate_during_training \
-  --predict_langs $LANGS \
-  --log_file $OUTPUT_DIR/train.log \
-  --eval_all_checkpoints \
-  --overwrite_output_dir \
-  --save_only_best_checkpoint $LC
+langs="mr nl pt ru ta te tr ur vi zh"
+for lang in $langs; do
+  TRAIN_LANG=$lang
+  OUTPUT_DIR="$OUT_DIR/$TASK/${MODEL}-LR${LR}-epoch${NUM_EPOCH}-MaxLen${MAX_LENGTH}-train-${TRAIN_LANG}"
+  mkdir -p $OUTPUT_DIR
+  echo "Train language: ${lang}"
+  python3 $REPO/third_party/run_tag.py \
+    --data_dir $DATA_DIR \
+    --model_type $MODEL_TYPE \
+    --labels $DATA_DIR/labels.txt \
+    --model_name_or_path $MODEL \
+    --train_langs $TRAIN_LANG \
+    --output_dir $OUTPUT_DIR \
+    --max_seq_length  $MAX_LENGTH \
+    --num_train_epochs $NUM_EPOCHS \
+    --gradient_accumulation_steps $GRAD_ACC \
+    --per_gpu_train_batch_size $BATCH_SIZE \
+    --save_steps 500 \
+    --seed 1 \
+    --learning_rate $LR \
+    --do_train \
+    --do_eval \
+    --do_predict_dev \
+    --predict_langs $LANGS \
+    --log_file $OUTPUT_DIR/train.log \
+    --overwrite_output_dir \
+    --save_only_best_checkpoint $LC \
+    --logging_steps 500
+done
