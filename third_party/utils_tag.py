@@ -203,7 +203,6 @@ def convert_examples_to_features(examples,
       input_mask += ([0 if mask_padding_with_zero else 1] * padding_length)
       segment_ids += ([pad_token_segment_id] * padding_length)
       label_ids += ([pad_token_label_id] * padding_length)
-
     if example.langs and len(example.langs) > 0:
       langs = [example.langs[0]] * max_seq_length
     else:
@@ -211,12 +210,16 @@ def convert_examples_to_features(examples,
       print('ex_index', ex_index, len(examples))
       langs = None
 
+    
+
     assert len(input_ids) == max_seq_length
     assert len(input_mask) == max_seq_length
     assert len(segment_ids) == max_seq_length
     assert len(label_ids) == max_seq_length
-    assert len(langs) == max_seq_length
-
+    try:
+      assert len(langs) == max_seq_length
+    except:
+      " ".join([str(x) for x in tokens])
     if ex_index < 5:
       logger.info("*** Example ***")
       logger.info("guid: %s", example.guid)

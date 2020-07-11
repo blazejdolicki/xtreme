@@ -350,11 +350,14 @@ def xnli_preprocess(args):
         writer.writerow([sent1, sent2, label])
     print(f'finish preprocess {outfile}')
 
-  infile = os.path.join(args.data_dir, 'XNLI-MT-1.0/multinli/multinli.train.en.tsv')
   if not os.path.exists(args.output_dir):
     os.makedirs(args.output_dir)
-  outfile = os.path.join(args.output_dir, 'train-en.tsv')
-  _preprocess_train_file(infile, outfile)
+
+  train_langs = ['ar','bg','de','el','en','es','fr','hi','ru','sw','th','tr','ur','vi','zh']
+  for lang in train_langs:
+    infile = os.path.join(args.data_dir, 'XNLI-MT-1.0/multinli/multinli.train.{}.tsv'.format(lang))
+    outfile = os.path.join(args.output_dir, 'train-{}.tsv'.format(lang))
+    _preprocess_train_file(infile, outfile)
 
   for split in ['test', 'dev']:
     infile = os.path.join(args.data_dir, 'XNLI-1.0/xnli.{}.tsv'.format(split))

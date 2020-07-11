@@ -795,6 +795,7 @@ def main():
       writer.write("Best checkpoint is {}, best accuracy is {}".format(best_checkpoint, best_score))
       logger.info("Best checkpoint is {}, best accuracy is {}".format(best_checkpoint, best_score))
 
+  print("HERE",args.init_checkpoint,args.model_name_or_path)
   # Prediction
   if args.do_predict and args.local_rank in [-1, 0]:
     tokenizer = tokenizer_class.from_pretrained(args.model_name_or_path if args.model_name_or_path else best_checkpoint, do_lower_case=args.do_lower_case)
@@ -814,8 +815,9 @@ def main():
       writer.write('total={}\n'.format(total_correct / total))
 
   if args.do_predict_dev:
-    tokenizer = tokenizer_class.from_pretrained(args.init_checkpoint, do_lower_case=args.do_lower_case)
-    model = model_class.from_pretrained(args.init_checkpoint)
+    
+    tokenizer = tokenizer_class.from_pretrained(args.output_dir, do_lower_case=args.do_lower_case)
+    model = model_class.from_pretrained(best_checkpoint)
     model.to(args.device)
     output_predict_file = os.path.join(args.output_dir, 'dev_results')
     total = total_correct = 0.0

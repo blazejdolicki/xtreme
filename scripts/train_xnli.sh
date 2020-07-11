@@ -44,17 +44,19 @@ else
   GRAD_ACC=4
 fi
 
-SAVE_DIR="$OUT_DIR/$TASK/${MODEL}-LR${LR}-epoch${EPOCH}-MaxLen${MAXL}/"
-mkdir -p $SAVE_DIR
 
-python $PWD/third_party/run_classify.py \
+TRAIN_LANGS="ar bg de el en es fr hi ru sw th tr ur vi zh"
+for lang in $TRAIN_LANGS; do
+  echo "Train language: ${lang}"
+  SAVE_DIR="$OUT_DIR/$TASK/${MODEL}-LR${LR}-epoch${EPOCH}-MaxLen${MAXL}-train-${lang}"
+  mkdir -p $SAVE_DIR
+  python $PWD/third_party/run_classify.py \
   --model_type $MODEL_TYPE \
   --model_name_or_path $MODEL \
-  --train_language en \
+  --train_language $lang \
   --task_name $TASK \
-  --do_train \
   --do_eval \
-  --do_predict \
+  --do_predict_dev \
   --data_dir $DATA_DIR/${TASK} \
   --gradient_accumulation_steps $GRAD_ACC \
   --per_gpu_train_batch_size $BATCH_SIZE \
@@ -62,10 +64,9 @@ python $PWD/third_party/run_classify.py \
   --num_train_epochs $EPOCH \
   --max_seq_length $MAXL \
   --output_dir $SAVE_DIR/ \
-  --save_steps 100 \
-  --eval_all_checkpoints \
+  --save_steps 2000 \
   --log_file 'train' \
   --predict_languages $LANGS \
   --save_only_best_checkpoint \
-  --overwrite_output_dir \
-  --eval_test_set $LC
+  --overwrite_output_dir 
+done

@@ -36,7 +36,7 @@ function download_xnli {
       --output_dir $DIR/xnli/ \
       --task xnli
     rm -rf $OUTPATH 
-    echo "Successfully ownload data at $DIR/xnli" >> $DIR/download.log
+    echo "Successfully download data at $DIR/xnli" >> $DIR/download.log
 }
 
 # download PAWS-X dataset
